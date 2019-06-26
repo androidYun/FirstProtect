@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhs.first.dao.ShopCartMapper">
+
+    <resultMap id="BaseResultMap" type="com.xhs.first.pojo.ShopCart">
+        <id column="cart_id" jdbcType="INTEGER" property="cartId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <collection property="itemCartList" ofType="com.xhs.first.entity.ItemCartDetailEntity">
+            <id column="cart_item_id" jdbcType="INTEGER" property="cartItemId"/>
+            <result column="number" jdbcType="INTEGER" property="number"/>
+            <result column="item_amount" jdbcType="DECIMAL" property="itemAmount"/>
+            <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+            <result column="cart_id" jdbcType="INTEGER" property="cartId"/>
+            <result column="protect_id" jdbcType="INTEGER" property="protectId"/>
+            <result column="group_id" jdbcType="INTEGER" property="groupId"/>
+            <result column="protect_name" jdbcType="VARCHAR" property="protectName"/>
+            <result column="price" jdbcType="DECIMAL" property="price"/>
+            <result column="image_url" jdbcType="VARCHAR" property="imageUrl"/>
+            <result column="sale_number" jdbcType="INTEGER" property="saleNumber"/>
+        </collection>
+    </resultMap>
+    <sql id="item_detail_list">
+    cart_id, user_id, create_time, amount
+  </sql>
+    <sql id="Base_Column_List">
+    cart_id, user_id, create_time, amount
+  </sql>
+    <select id="getShopCartListById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+         sc.*,ic.*,p.*
+        from shop_cart sc,item_cart ic,protect p
+        where user_id = #{userId,jdbcType=INTEGER} and sc.cart_id=ic.cart_id and ic.protect_id=p.protect_id
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from shop_cart
+        where cart_id = #{cartId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from shop_cart
+    where cart_id = #{cartId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.xhs.first.pojo.ShopCart" useGeneratedKeys="true" keyProperty="cartId" keyColumn="cart_id" >
+    insert into shop_cart (cart_id, user_id, create_time, 
+      amount)
+    values (#{cartId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{amount,jdbcType=DECIMAL})
+  </insert>
+    <insert id="insertSelective" parameterType="com.xhs.first.pojo.ShopCart">
+        insert into shop_cart
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cartId != null">
+                cart_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cartId != null">
+                #{cartId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xhs.first.pojo.ShopCart">
+        update shop_cart
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where cart_id = #{cartId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xhs.first.pojo.ShopCart">
+    update shop_cart
+    set user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      amount = #{amount,jdbcType=DECIMAL}
+    where cart_id = #{cartId,jdbcType=INTEGER}
+  </update>
+</mapper>

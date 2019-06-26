@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhs.first.dao.ProtectGroupMapper">
+    <resultMap id="BaseResultMap" type="com.xhs.first.pojo.ProtectGroup">
+        <id column="group_id" jdbcType="INTEGER" property="groupId"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="group_desc" jdbcType="VARCHAR" property="groupDesc"/>
+        <collection property="protectList" ofType="com.xhs.first.pojo.Protect">
+            <id column="protect_id" jdbcType="INTEGER" property="protectId"/>
+            <result column="group_id" jdbcType="INTEGER" property="groupId"/>
+            <result column="protect_name" jdbcType="VARCHAR" property="protectName"/>
+            <result column="price" jdbcType="DECIMAL" property="price"/>
+            <result column="image_url" jdbcType="VARCHAR" property="imageUrl"/>
+            <result column="number" jdbcType="INTEGER" property="number"/>
+            <result column="sale_number" jdbcType="INTEGER" property="saleNumber"/>
+            <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+    group_id, group_name, create_time, group_desc
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from protect_group
+        where group_id = #{groupId,jdbcType=INTEGER}
+    </select>
+    <select id="selectByGroupName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from protect_group
+        where group_name = #{groupId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAllGroup" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+       pg.*,p.*
+        from protect_group as pg,protect as p where pg.user_id=#{userId,jdbcType=INTEGER} and pg.group_id=p.group_id
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from protect_group
+    where group_id = #{groupId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.xhs.first.pojo.ProtectGroup">
+    insert into protect_group (group_id, group_name, create_time, 
+      group_desc)
+    values (#{groupId,jdbcType=INTEGER}, #{groupName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{groupDesc,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.xhs.first.pojo.ProtectGroup">
+        insert into protect_group
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="groupId != null">
+                group_id,
+            </if>
+            <if test="groupName != null">
+                group_name,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="groupDesc != null">
+                group_desc,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="groupId != null">
+                #{groupId,jdbcType=INTEGER},
+            </if>
+            <if test="groupName != null">
+                #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="groupDesc != null">
+                #{groupDesc,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xhs.first.pojo.ProtectGroup">
+        update protect_group
+        <set>
+            <if test="groupName != null">
+                group_name = #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="groupDesc != null">
+                group_desc = #{groupDesc,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where group_id = #{groupId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xhs.first.pojo.ProtectGroup">
+    update protect_group
+    set group_name = #{groupName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      group_desc = #{groupDesc,jdbcType=VARCHAR}
+    where group_id = #{groupId,jdbcType=INTEGER}
+  </update>
+
+</mapper>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhs.first.dao.ProtectMapper">
+    <resultMap id="BaseResultMap" type="com.xhs.first.pojo.Protect" >
+        <id column="protect_id" jdbcType="INTEGER" property="protectId"/>
+        <result column="group_id" jdbcType="INTEGER" property="groupId"/>
+        <result column="protect_name" jdbcType="VARCHAR" property="protectName"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="image_url" jdbcType="VARCHAR" property="imageUrl"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="sale_number" jdbcType="INTEGER" property="saleNumber"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    protect_id, group_id, protect_name, price, image_url, number, sale_number, create_time
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from protect
+        where protect_id = #{protectId,jdbcType=INTEGER}
+    </select>
+    <select id="getProtectListById" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from protect
+        where protect_id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from protect
+        where protect_name = #{protectName,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from protect
+    where protect_id = #{protectId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.xhs.first.pojo.Protect">
+    insert into protect (protect_id, group_id, protect_name, 
+      price, image_url, number, 
+      sale_number, create_time)
+    values (#{protectId,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, #{protectName,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{imageUrl,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
+      #{saleNumber,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.xhs.first.pojo.Protect">
+        insert into protect
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="protectId != null">
+                protect_id,
+            </if>
+            <if test="groupId != null">
+                group_id,
+            </if>
+            <if test="protectName != null">
+                protect_name,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="imageUrl != null">
+                image_url,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="saleNumber != null">
+                sale_number,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="protectId != null">
+                #{protectId,jdbcType=INTEGER},
+            </if>
+            <if test="groupId != null">
+                #{groupId,jdbcType=INTEGER},
+            </if>
+            <if test="protectName != null">
+                #{protectName,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="imageUrl != null">
+                #{imageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=INTEGER},
+            </if>
+            <if test="saleNumber != null">
+                #{saleNumber,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xhs.first.pojo.Protect">
+        update protect
+        <set>
+            <if test="groupId != null">
+                group_id = #{groupId,jdbcType=INTEGER},
+            </if>
+            <if test="protectName != null">
+                protect_name = #{protectName,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="imageUrl != null">
+                image_url = #{imageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                number = #{number,jdbcType=INTEGER},
+            </if>
+            <if test="saleNumber != null">
+                sale_number = #{saleNumber,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where protect_id = #{protectId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xhs.first.pojo.Protect">
+    update protect
+    set group_id = #{groupId,jdbcType=INTEGER},
+      protect_name = #{protectName,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      image_url = #{imageUrl,jdbcType=VARCHAR},
+      number = #{number,jdbcType=INTEGER},
+      sale_number = #{saleNumber,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where protect_id = #{protectId,jdbcType=INTEGER}
+  </update>
+</mapper>
